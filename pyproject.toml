@@ -1,0 +1,41 @@
+[project]
+name = "complianceqapipeline"
+version = "0.1.0"
+description = "Compliance QA Pipeline using FastAPI + LangGraph + ChromaDB"
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    # Backend
+    "fastapi>=0.128.0",
+    "uvicorn>=0.40.0",
+    # Environment
+    "python-dotenv>=1.2.1",
+    # LangChain / Agents
+    "langchain>=1.2.0",
+    "langchain-community>=0.4.1",
+    "langgraph>=1.0.5",
+    "langsmith>=0.5.2",
+    # Gemini Integration
+    "langchain-google-genai>=2.1.0",
+    # Vector DB
+    "chromadb>=1.0.15",
+    # Embeddings
+    "sentence-transformers>=5.1.0",
+    # PDF Processing
+    "pypdf>=6.5.0",
+    # Data utilities
+    "pandas>=2.3.3",
+    # Validation
+    "pydantic>=2.12.5",
+    # Optional scraping
+    "requests>=2.32.5",
+    "firecrawl-py>=4.12.0",
+    # Optional UI
+    "streamlit>=1.52.2",
+    # Video / media support
+    "yt-dlp>=2025.1.12",
+    "azure-identity>=1.15.0",
+    "azure-search-documents>=11.4.0",
+    "langchain-huggingface>=1.2.2",
+]

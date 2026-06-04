@@ -114,8 +114,8 @@ class VideoIndexerService:
             elif state == "Quarantined":
                 raise Exception("Video Quarantined (Copyright/Content Policy Violation).")
             
-            logger.info(f"Status: {state}... waiting 30s")
-            time.sleep(30)
+            logger.info(f"Status: {state}... waiting 60s")
+            time.sleep(60)
 
     def extract_data(self, vi_json):
         """Parses the JSON into our State format."""

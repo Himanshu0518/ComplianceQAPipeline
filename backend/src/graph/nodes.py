@@ -113,11 +113,12 @@ def audio_content_node(state: VideoAuditState) -> Dict[str, Any]:
     )
 
     vector_store = AzureSearch(
-        endpoint=os.getenv("AZURE_SEARCH_ENDPOINT"),
+        azure_search_endpoint=os.getenv("AZURE_SEARCH_ENDPOINT"),
         index_name=os.getenv("AZURE_SEARCH_INDEX_NAME"),
-        credential=os.getenv("AZURE_SEARCH_API_KEY"),
+        azure_search_key=os.getenv("AZURE_SEARCH_API_KEY"),
         embedding_function=embeddings.embed_query,
     )
+
 
     # --- RAG retrieval ---
     ocr_texts = state.get("ocr_text") or []

@@ -318,18 +318,33 @@ if run_audit:
             )
             for issue in compliance_results:
                 sev       = (issue.get("severity") or "LOW").upper()
-                sev_cls   = f"sev-{sev.lower()}"   if sev in ("HIGH","MEDIUM","LOW") else "sev-low"
-                row_cls   = f"vrow-{sev.lower()}"  if sev in ("HIGH","MEDIUM","LOW") else "vrow-low"
-                ts_html   = (f'<div class="vrow-ts">⏱ {issue.get("timestamp")}</div>'
-                             if issue.get("timestamp") else "")
+                sev_cls   = f"sev-{sev.lower()}"  if sev in ("HIGH","MEDIUM","LOW") else "sev-low"
+                row_cls   = f"vrow-{sev.lower()}" if sev in ("HIGH","MEDIUM","LOW") else "vrow-low"
+                conf      = issue.get("confidence_score")
+                rule      = issue.get("rule_reference")
+                conf_html = (
+                    f'<span style="font-family:\'IBM Plex Mono\',monospace;font-size:0.70rem;'
+                    f'color:#4a5568;margin-left:8px;">conf {conf:.0%}</span>'
+                    if conf is not None else ""
+                )
+                rule_html = (
+                    f'<div class="vrow-ts">📖 Rule: {rule}</div>'
+                    if rule else ""
+                )
+                ts_html = (
+                    f'<div class="vrow-ts">⏱ {issue.get("timestamp")}</div>'
+                    if issue.get("timestamp") else ""
+                )
                 st.markdown(
                     f"""
                     <div class="violation-row {row_cls}">
                         <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
                             <span class="{sev_cls}">{sev}</span>
                             <span class="vrow-title">{issue.get("category","—")}</span>
+                            {conf_html}
                         </div>
                         <div class="vrow-desc">{issue.get("description","")}</div>
+                        {rule_html}
                         {ts_html}
                     </div>
                     """,
@@ -344,7 +359,24 @@ if run_audit:
                 st.markdown(final_report)
 
         if transcript or video_metadata:
-            with st.expander("🔍  Raw Extracted Data (debug)"):
+            # ── Keywords chip row ─────────────────────────────────────────────
+            keywords = final_state.get("keywords", [])
+            if keywords:
+                chips = " ".join(
+                    f'<span style="background:#1a2540;color:#63b3ed;border:1px solid #2b4c7e;'
+                    f'border-radius:20px;padding:3px 10px;font-size:0.72rem;'
+                    f'font-family:\'IBM Plex Mono\',monospace;margin:3px 2px;display:inline-block;">'
+                    f'{kw}</span>'
+                    for kw in keywords[:20]
+                )
+                st.markdown(
+                    f'<div style="font-family:\'IBM Plex Mono\',monospace;font-size:0.72rem;'
+                    f'letter-spacing:0.12em;text-transform:uppercase;color:#4a5568;margin-bottom:8px;margin-top:8px;">'
+                    f'Detected Keywords</div><div style="margin-bottom:16px;">{chips}</div>',
+                    unsafe_allow_html=True,
+                )
+
+            with st.expander("🔍  Raw Extracted Data"):
                 if video_metadata:
                     st.json(video_metadata)
                 if transcript:
